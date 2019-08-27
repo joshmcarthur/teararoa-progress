@@ -1,0 +1,16 @@
+#container {
+  min-width: 100vw;
+  min-height: 100vh;
+  background: url(topography.svg);
+}
+
+.App {
+  padding: 1rem 0;
+}
+
+.SectionCard {
+  width: 70%;
+  margin: 1rem auto;
+
+  .mdc-card__primary-action { padding: 1rem; }
+}
