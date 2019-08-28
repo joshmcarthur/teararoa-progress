@@ -1,16 +1,34 @@
-#container {
-  min-width: 100vw;
-  min-height: 100vh;
-  background: url(topography.svg);
+
+$mdc-theme-primary: #374046;
+$mdc-theme-secondary: #607D8B;
+$mdc-theme-background: #FFFF;
+$mdc-theme-text-secondary-on-background: rgba(0, 0, 0, 0.54);
+
+@import '@material/typography/mdc-typography';
+@import "@material/theme/mdc-theme";
+
+.drawer-container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  overflow: hidden;
 }
 
-.App {
-  padding: 1rem 0;
+.drawer-app-content {
+  flex: auto;
+  overflow: auto;
 }
 
-.SectionCard {
-  width: 70%;
-  margin: 1rem auto;
+.top-app-bar-fix-adjust {
+  display: flex;
+  width: 100%;
+}
 
-  .mdc-card__primary-action { padding: 1rem; }
+
+.mdc-drawer--dismissible {
+  top: auto;
+}
+
+.mdc-drawer .mdc-list--two-line .mdc-list-item {
+  height: 72px;
 }
