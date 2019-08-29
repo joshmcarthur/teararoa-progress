@@ -4,8 +4,10 @@ import "@material/react-top-app-bar/index.scss";
 import "@material/react-list/index.scss";
 import "@material/react-drawer/index.scss";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { fromJS } from "immutable";
 
 import routeGeoJSON from "./data/route_and_waypoints";
+import BASE_MAP_STYLE from "./baseMapStyle.json";
 
 import TopAppBar, {
   TopAppBarFixedAdjust,
@@ -81,14 +83,23 @@ class Map extends React.Component {
       height: "100%",
       latitude: -42,
       longitude: 174,
-      zoom: 8
+      zoom: 5
     }
   };
 
+  dataLayer = {"id": "route", "source": "routeSegment", "type": "line"};
+
   render() {
+    const mapStyle = this.props.section ? fromJS(BASE_MAP_STYLE)
+      // Add geojson source to map
+      .setIn(['sources', 'routeSegment'], fromJS({type: 'geojson', data: this.props.section.segment}))
+      // Add point layer to map
+      .set('layers', fromJS(BASE_MAP_STYLE).get('layers').push(this.dataLayer)) : null;
+
     return (
       <ReactMapGL
         {...this.state.viewport}
+        mapStyle={mapStyle || BASE_MAP_STYLE}
         mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_API_KEY}
         onViewportChange={(viewport) => this.setState({viewport})}
       />
@@ -122,7 +133,7 @@ class App extends React.Component {
                 twoLine
                 selectedIndex={this.state.selectedIndex}
                 handleSelect={selectedIndex =>
-                  this.setState({ selectedIndex })
+                  this.setState({ selectedIndex})
                 }
               >
                 {this.state.sections.map(s => (
@@ -136,7 +147,7 @@ class App extends React.Component {
           </Drawer>
 
           <DrawerAppContent className="drawer-app-content">
-            <Map />
+            <Map section={this.state.sections[this.state.selectedIndex]} />
           </DrawerAppContent>
         </TopAppBarFixedAdjust>
       </div>
