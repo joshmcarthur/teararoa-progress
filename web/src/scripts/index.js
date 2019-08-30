@@ -2,6 +2,7 @@ import '../styles/index.scss';
 import "../../node_modules/mapbox-gl/dist/mapbox-gl.css";
 import mapboxgl from "mapbox-gl";
 import jQuery from "jquery";
+import milestones from "json-loader!../..//milestones_km.geojson";
 mapboxgl.accessToken = "pk.eyJ1Ijoic3Vkb2pvc2giLCJhIjoiY2p6djFpa2o0MGJlNDNibXIydjc1azcxNCJ9.4eH1qtw74O1soNIExDKHzQ";
 
 var map = new mapboxgl.Map({
@@ -10,7 +11,6 @@ var map = new mapboxgl.Map({
   zoom: 6,
   center: [174, -42]
 });
-
 
 jQuery.ajax({
     url: "https://script.google.com/macros/s/AKfycbzGvKKUIaqsMuCj7-A2YRhR-f7GZjl4kSxSN1YyLkS01_CfiyE/exec",
@@ -29,6 +29,18 @@ jQuery.ajax({
  
     // Work with the response
     success: function( response ) {
-        console.log( response ); // server response
+      const completedKms = response.records.filter(r => r["Completed?"]).map(r => r.Route_Distance);
+      console.log(completedKms);
+      const metMilestones = milestones.features.filter(feat => completedKms.indexOf(Number(feat.properties.name)) >= 0);
+      map
+        .addSource('milestones', {
+          type: 'geojson',
+          data: { type: "FeatureCollection", features: metMilestones }
+        })
+        .addLayer({
+          id: "milestones",
+          source: "milestones",
+          type: "circle"
+        });
     }
 });
