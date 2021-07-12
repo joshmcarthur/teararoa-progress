@@ -16,20 +16,17 @@ var map = new mapboxgl.Map({
 map.on("load", () => map.resize());
 
 jQuery.ajax({
-    url: "https://script.google.com/macros/s/AKfycbzGvKKUIaqsMuCj7-A2YRhR-f7GZjl4kSxSN1YyLkS01_CfiyE/exec",
- 
+    url: "https://script.google.com/macros/s/AKfycbwanTnYjqOuuKePtGPyYHiemWZCYchGZ0w3xjuMruiYEdQ4AFSuS0qBv8k45elG928E/exec",
+
     // The name of the callback parameter, as specified by the YQL service
     jsonp: "callback",
- 
-    // Tell jQuery we're expecting JSONP
-    dataType: "jsonp",
- 
+
     // Tell YQL what we want and that we want JSON
     data: {
         id: "1ddAdoHp2q0yzX_cR5NX_fMsiJ0uA9KYHgqGpF9gqnHg",
         sheet: "output"
     },
- 
+
     // Work with the response
     success: function( response ) {
       const completedKms = response.records.filter(r => r["Completed?"]).map(r => r.Route_Distance);
